@@ -28,6 +28,13 @@ namespace TodoListApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+            });
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TodoList")));
         }
 
@@ -42,6 +49,8 @@ namespace TodoListApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
